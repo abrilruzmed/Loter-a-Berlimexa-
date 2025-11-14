@@ -2,10 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Lotería Berlimexa</title>
+  <title>Lotería Berlimexa (Prototipo)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fuente divertida -->
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
@@ -16,178 +15,179 @@
     }
 
     body {
-      font-family: system-ui, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f0ea;
       color: #333;
     }
 
-    /* HEADER */
-    .header {
-      text-align: center;
-      padding: 1.5rem 1rem;
-      background: #c62828;
-      color: #fff;
-      overflow: hidden;
+    /* ==============================
+       MARCA DE AGUA GLOBAL
+    ===============================*/
+    .board-cell,
+    .marquee-card,
+    #current-card {
       position: relative;
     }
 
+    .board-cell::before,
+    .marquee-card::before,
+    #current-card::before {
+      content: "©️ Abril Ruzmed · 2025";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.25);
+      text-shadow: 0 0 3px rgba(0,0,0,0.4);
+      pointer-events: none;
+      transform: rotate(-25deg);
+      white-space: nowrap;
+    }
+
+    /* =============================== */
+
+    .header {
+      text-align: center;
+      padding: 1.2rem 1rem 0.6rem;
+      background: #c62828;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
     .header h1 {
-      font-family: "Baloo 2", sans-serif;
-      font-size: 2.5rem;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.15rem;
+      font-family: "Baloo 2", system-ui, sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
     }
 
     .header p {
       font-size: 0.9rem;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.15rem;
     }
 
-    /* MARQUEE */
     .marquee {
-      margin-top: 0.5rem;
+      margin-top: 0.6rem;
       border-top: 1px solid rgba(255,255,255,0.4);
       border-bottom: 1px solid rgba(255,255,255,0.4);
       overflow: hidden;
-      padding: 0.5rem 0;
-      height: 80px;
+      padding: 0.45rem 0;
     }
 
     .marquee-inner {
       display: flex;
-      gap: 0.5rem;
-      animation: scroll 18s linear infinite;
+      gap: 0.4rem;
+      animation: marquee 20s linear infinite;
     }
 
     .marquee-card {
-      width: 55px;
-      height: 75px;
+      width: 42px;
+      height: 64px;
+      border-radius: 4px;
       background-size: cover;
       background-position: center;
-      border-radius: 6px;
-      flex: 0 0 auto;
       box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
 
-    @keyframes scroll {
+    @keyframes marquee {
       0%   { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
-    /* LAYOUT GENERAL */
     .container {
       display: flex;
+      flex-wrap: wrap;
       padding: 1rem;
       gap: 1rem;
-      flex-wrap: wrap;
     }
 
-    /* PANEL IZQUIERDO */
     .panel {
       flex: 0 0 260px;
+      max-width: 280px;
       background: #fff;
-      padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .current-card {
-      width: 130px;
-      height: 190px;
-      margin: 0.5rem auto;
+      width: 120px;
+      height: 180px;
       border-radius: 8px;
-      border: 2px solid #222;
+      border: 2px solid #333;
       background: #eee center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
       font-weight: bold;
+      margin: 0.5rem 0;
     }
 
     .controls button {
-      width: 48%;
-      margin: 0.2rem 1%;
       padding: 0.4rem;
+      border-radius: 4px;
       border: none;
-      border-radius: 5px;
-      background: #1565c0;
-      color: #fff;
       cursor: pointer;
       font-weight: 600;
+      background: #1565c0;
+      color: #fff;
+      width: 48%;
+      margin-bottom: 0.3rem;
     }
 
-    .controls button:disabled {
-      background: #aaa;
-    }
-
-    .log-messages {
-      height: 130px;
-      overflow-y: auto;
-      padding: 0.5rem;
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 0.85rem;
-    }
-
-    /* TABLERO JUGADOR */
     .board-section {
-      flex: 1 1 280px;
+      flex: 1.1 1 240px;
       background: #fff;
-      padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     #player-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.35rem;
-      max-width: 300px;
+      max-width: 260px;
       margin: auto;
     }
 
     .board-cell {
-      position: relative;
-      padding-top: 120%;
+      padding-top: 130%;
       border-radius: 6px;
       border: 2px solid #333;
       background-size: cover;
       background-position: center;
       cursor: pointer;
+      overflow: hidden;
     }
 
     .board-cell::after {
       content: attr(data-card-id);
       position: absolute;
-      bottom: 3px;
-      width: 100%;
-      text-align: center;
+      bottom: 4px;
+      right: 4px;
+      color: #fff;
       font-weight: 700;
-      font-size: 0.8rem;
-      color: white;
-      text-shadow: 0 0 3px black;
+      text-shadow: 0 0 4px #000;
     }
 
     .board-cell.marked {
-      filter: brightness(0.65);
-      outline: 4px solid yellow;
+      box-shadow: 0 0 0 3px #ffeb3b inset;
+      filter: brightness(0.7);
     }
 
-    /* OPONENTES */
     .opponents-section {
       flex: 1 1 260px;
+      max-width: 320px;
       background: #fff;
       padding: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .opponent-card {
-      background: #fafafa;
-      padding: 0.6rem;
-      border-radius: 8px;
-      margin-bottom: 0.8rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .opponent-board {
@@ -196,17 +196,11 @@
       gap: 0.25rem;
     }
 
-    .opponent-board .board-cell {
-      padding-top: 110%;
-      cursor: default;
-    }
-
-    /* FOOTER */
     .footer {
       text-align: center;
-      padding: 1rem;
+      padding: 0.7rem;
       font-size: 0.8rem;
-      color: #444;
+      color: #555;
     }
   </style>
 </head>
@@ -215,7 +209,7 @@
   <header class="header">
     <h1>Lotería Berlimexa</h1>
     <p>Creado por Abril Ruzmed</p>
-    <p>Prototipo recreativo · Sin apuestas · Sin premios monetarios · Inspirado en la lotería mexicana</p>
+    <p>Prototipo recreativo · Sin apuestas · Inspirado en la lotería mexicana</p>
 
     <div class="marquee">
       <div class="marquee-inner" id="marquee-inner"></div>
@@ -223,12 +217,11 @@
   </header>
 
   <main class="container">
-    <!-- PANEL IZQUIERDO -->
     <section class="panel">
       <h2>Partida</h2>
 
       <p><strong>Carta actual:</strong></p>
-      <div id="current-card" class="current-card">
+      <div id="current-card">
         <span id="current-card-number">–</span>
       </div>
 
@@ -243,37 +236,31 @@
 
       <h3>Jugadores</h3>
       <ul>
-        <li>Panda: <span id="bot1-progress">0 / 16</span></li>
-        <li>Cleo: <span id="bot2-progress">0 / 16</span></li>
-        <li>July: <span id="bot3-progress">0 / 16</span></li>
+        <li>Panda: <span id="bot1-progress">0/16</span></li>
+        <li>Cleo: <span id="bot2-progress">0/16</span></li>
+        <li>July: <span id="bot3-progress">0/16</span></li>
       </ul>
 
       <h3>Mensajes</h3>
-      <div id="log-messages" class="log-messages"></div>
+      <div id="log-messages" style="max-height:150px; overflow:auto; background:#fafafa; border:1px solid #ddd; padding:4px; font-size:0.85rem;"></div>
     </section>
 
-    <!-- TABLERO JUGADOR -->
     <section class="board-section">
       <h2>Tu tablero (4×4)</h2>
-      <p>Haz clic en tus cartas cuando salgan. No se resaltan automáticamente.</p>
-
+      <p>Marca solo las cartas que hayan salido.</p>
       <div id="player-board"></div>
     </section>
 
-    <!-- OPONENTES -->
     <section class="opponents-section">
       <h2>Oponentes</h2>
-
       <div class="opponent-card">
         <h3>Panda</h3>
         <div id="board-panda" class="opponent-board"></div>
       </div>
-
       <div class="opponent-card">
         <h3>Cleo</h3>
         <div id="board-cleo" class="opponent-board"></div>
       </div>
-
       <div class="opponent-card">
         <h3>July</h3>
         <div id="board-july" class="opponent-board"></div>
@@ -282,285 +269,269 @@
   </main>
 
   <footer class="footer">
-    Lotería Berlimexa · Prototipo sin ánimo de lucro · 2025 · All rights reserved.
+    <p>Lotería Berlimexa · Prototipo · ©️ Abril Ruzmed 2025 · All rights reserved</p>
   </footer>
 
-<script>
-  /* CONFIG */
-  const TOTAL_CARDS = 54;
-  const BOARD_SIZE = 16;
-  const CARD_INTERVAL = 4000;
-  const CARD_BASE_URL = "assets";
+  <script>
+    const TOTAL_CARDS = 54;
+    const BOARD_SIZE = 16;
+    const CARD_INTERVAL_MS = 4000;
+    const CARD_BASE_URL = "assets";
 
-  let deck = [];
-  let currentCardIndex = -1;
-  let interval = null;
-  let paused = false;
-  let gameOver = false;
+    let deck = [];
+    let currentCardIndex = -1;
+    let intervalId = null;
+    let isPaused = false;
+    let gameOver = false;
 
-  let playerBoard = [];
-  let playerMarked = new Set();
+    let playerBoard = [];
+    let playerMarked = new Set();
 
-  const bots = [
-    { name: "Panda", board: [], marked: new Set(), el: null, prog: null },
-    { name: "Cleo", board: [], marked: new Set(), el: null, prog: null },
-    { name: "July", board: [], marked: new Set(), el: null, prog: null }
-  ];
+    const bots = [
+      { name: "Panda", board: [], marked: new Set(), progressEl: null, boardEl: null },
+      { name: "Cleo", board: [], marked: new Set(), progressEl: null, boardEl: null },
+      { name: "July", board: [], marked: new Set(), progressEl: null, boardEl: null },
+    ];
 
-  const marqueeInner = document.getElementById("marquee-inner");
+    const currentCardEl = document.getElementById("current-card");
+    const currentCardNumberEl = document.getElementById("current-card-number");
+    const cardsPlayedEl = document.getElementById("cards-played");
 
-  function shuffle(arr) {
-    let a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
+    const btnNewGame = document.getElementById("btn-new-game");
+    const btnPause = document.getElementById("btn-pause");
+    const btnResume = document.getElementById("btn-resume");
+    const btnLoteria = document.getElementById("btn-loteria");
+
+    const playerBoardContainer = document.getElementById("player-board");
+    const logMessages = document.getElementById("log-messages");
+
+    bots[0].progressEl = document.getElementById("bot1-progress");
+    bots[1].progressEl = document.getElementById("bot2-progress");
+    bots[2].progressEl = document.getElementById("bot3-progress");
+
+    bots[0].boardEl = document.getElementById("board-panda");
+    bots[1].boardEl = document.getElementById("board-cleo");
+    bots[2].boardEl = document.getElementById("board-july");
+
+    const marqueeInner = document.getElementById("marquee-inner");
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
     }
-    return a;
-  }
 
-  function createDeck() {
-    return shuffle([...Array(TOTAL_CARDS).keys()].map(i => i + 1));
-  }
+    function log(msg) {
+      const line = document.createElement("div");
+      line.textContent = msg;
+      logMessages.appendChild(line);
+      logMessages.scrollTop = logMessages.scrollHeight;
+    }
 
-  function generateBoard() {
-    return createDeck().slice(0, BOARD_SIZE);
-  }
+    function createDeck() {
+      return shuffle([...Array(TOTAL_CARDS).keys()].map(i => i + 1));
+    }
 
-  function log(msg) {
-    const box = document.getElementById("log-messages");
-    const line = document.createElement("div");
-    line.textContent = msg;
-    box.appendChild(line);
-    box.scrollTop = box.scrollHeight;
-  }
+    function generateBoard() {
+      return createDeck().slice(0, BOARD_SIZE);
+    }
 
-  /* MARQUEE */
-  function initMarquee() {
-    const cards = [1,2,3,4,5,6,7,8];
-    const loop = cards.concat(cards);
-
-    loop.forEach(id => {
-      const d = document.createElement("div");
-      d.className = "marquee-card";
-      d.style.backgroundImage = `url("${CARD_BASE_URL}/${id}.png")`;
-      marqueeInner.appendChild(d);
-    });
-  }
-
-  /* RENDER TABLEROS */
-  function renderPlayerBoard() {
-    const board = document.getElementById("player-board");
-    board.innerHTML = "";
-    playerBoard.forEach(card => {
-      const c = document.createElement("div");
-      c.className = "board-cell";
-      c.dataset.cardId = card;
-      c.style.backgroundImage = `url("${CARD_BASE_URL}/${card}.png")`;
-
-      c.onclick = () => onPlayerClick(c);
-      board.appendChild(c);
-    });
-  }
-
-  function renderBots() {
-    bots.forEach(bot => {
-      bot.el.innerHTML = "";
-      bot.board.forEach(card => {
+    function initMarquee() {
+      const iconic = [1,2,3,4,5,6,7,8].concat([1,2,3,4,5,6,7,8]);
+      iconic.forEach(id => {
         const c = document.createElement("div");
-        c.className = "board-cell";
-        c.dataset.cardId = card;
-        c.style.backgroundImage = `url("${CARD_BASE_URL}/${card}.png")`;
-        bot.el.appendChild(c);
+        c.className = "marquee-card";
+        c.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${id}.png") ⁠;
+        marqueeInner.appendChild(c);
       });
-    });
-  }
+    }
 
-  function updateBotProgress() {
-    bots.forEach(bot => {
-      bot.prog.textContent = `${bot.marked.size} / 16`;
-    });
-  }
+    function renderPlayerBoard() {
+      playerBoardContainer.innerHTML = "";
+      playerBoard.forEach(cardId => {
+        const cell = document.createElement("div");
+        cell.className = "board-cell";
+        cell.dataset.cardId = cardId;
+        cell.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${cardId}.png") ⁠;
+        cell.addEventListener("click", () => onPlayerCellClick(cell));
+        playerBoardContainer.appendChild(cell);
+      });
+    }
 
-  function markBotCardUi(bot, card) {
-    [...bot.el.querySelectorAll(".board-cell")].forEach(cell => {
-      if (Number(cell.dataset.cardId) === card) {
+    function onPlayerCellClick(cell) {
+      if (gameOver || currentCardIndex < 0) return;
+      const cardId = Number(cell.dataset.cardId);
+
+      const revealed = new Set(deck.slice(0, currentCardIndex + 1));
+      if (!revealed.has(cardId)) {
+        log("Esa carta no ha salido.");
+        return;
+      }
+
+      if (playerMarked.has(cardId)) {
+        playerMarked.delete(cardId);
+        cell.classList.remove("marked");
+      } else {
+        playerMarked.add(cardId);
         cell.classList.add("marked");
       }
-    });
-  }
-
-  /* CLICK USUARIO */
-  function onPlayerClick(cell) {
-    if (gameOver || currentCardIndex < 0) return;
-
-    const id = Number(cell.dataset.cardId);
-    const revealed = new Set(deck.slice(0, currentCardIndex + 1));
-
-    if (!revealed.has(id)) {
-      log("Esa carta aún no ha salido.");
-      return;
     }
 
-    if (playerMarked.has(id)) {
-      playerMarked.delete(id);
-      cell.classList.remove("marked");
-    } else {
-      playerMarked.add(id);
-      cell.classList.add("marked");
+    function renderBotsBoards() {
+      bots.forEach(bot => {
+        bot.boardEl.innerHTML = "";
+        bot.board.forEach(cardId => {
+          const cell = document.createElement("div");
+          cell.className = "board-cell";
+          cell.dataset.cardId = cardId;
+          cell.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${cardId}.png") ⁠;
+          bot.boardEl.appendChild(cell);
+        });
+      });
     }
-  }
 
-  /* BOTS */
-  function botsProcess(card) {
-    bots.forEach(bot => {
-      if (bot.board.includes(card) && !bot.marked.has(card)) {
-        bot.marked.add(card);
-        markBotCardUi(bot, card);
+    function markBotCard(bot, cardId) {
+      const cells = bot.boardEl.children;
+      for (const c of cells) {
+        if (Number(c.dataset.cardId) === cardId) {
+          c.classList.add("marked");
+        }
       }
+    }
 
-      if (!gameOver && bot.marked.size === 16) {
+    function botsProcessCard(cardId) {
+      bots.forEach(bot => {
+        if (bot.board.includes(cardId)) {
+          bot.marked.add(cardId);
+          markBotCard(bot, cardId);
+        }
+        bot.progressEl.textContent = ⁠ ${bot.marked.size}/16 ⁠;
+        if (bot.marked.size === BOARD_SIZE && !gameOver) {
+          gameOver = true;
+          stopDealer();
+          alert(⁠ ${bot.name} ganó con LOTERÍA ⁠);
+        }
+      });
+    }
+
+    function updateCurrentCardUI() {
+      if (currentCardIndex < 0) {
+        currentCardNumberEl.textContent = "–";
+        currentCardEl.style.backgroundImage = "none";
+        cardsPlayedEl.textContent = "Cartas jugadas: 0 / 54";
+        return;
+      }
+      
+      const cardId = deck[currentCardIndex];
+      currentCardNumberEl.textContent = cardId;
+      currentCardEl.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${cardId}.png") ⁠;
+      cardsPlayedEl.textContent = ⁠ Cartas jugadas: ${currentCardIndex+1} / 54 ⁠;
+    }
+
+    function nextCard() {
+      if (isPaused || gameOver) return;
+
+      currentCardIndex++;
+      if (currentCardIndex >= deck.length) {
         gameOver = true;
         stopDealer();
-        updateBotProgress();
-        log(`${bot.name} grita ¡LOTERÍA!`);
-        alert(`${bot.name} ha ganado.`);
+        alert("Fin del mazo. Nadie ganó.");
+        return;
       }
-    });
 
-    updateBotProgress();
-  }
-
-  /* CARTAS */
-  function updateCardUi() {
-    const currentEl = document.getElementById("current-card");
-    const numberEl = document.getElementById("current-card-number");
-
-    if (currentCardIndex < 0) {
-      numberEl.textContent = "–";
-      currentEl.style.backgroundImage = "none";
-      return;
+      const cardId = deck[currentCardIndex];
+      updateCurrentCardUI();
+      log(⁠ Salió la carta ${cardId} ⁠);
+      botsProcessCard(cardId);
     }
 
-    const card = deck[currentCardIndex];
-    numberEl.textContent = card;
-    currentEl.style.backgroundImage = `url("${CARD_BASE_URL}/${card}.png")`;
-    document.getElementById("cards-played").textContent =
-      `Cartas jugadas: ${currentCardIndex + 1} / 54`;
-  }
+    function startDealer() {
+      intervalId = setInterval(nextCard, CARD_INTERVAL_MS);
+    }
 
-  function nextCard() {
-    if (paused || gameOver) return;
+    function stopDealer() {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
 
-    currentCardIndex++;
-    if (currentCardIndex >= deck.length) {
+    function resetGameState() {
+      gameOver = false;
+      isPaused = false;
       stopDealer();
-      log("Se acabaron las cartas.");
-      alert("Nadie ganó.");
-      return;
+      deck = createDeck();
+      currentCardIndex = -1;
+
+      playerBoard = generateBoard();
+      playerMarked = new Set();
+
+      bots.forEach(bot => {
+        bot.board = generateBoard();
+        bot.marked = new Set();
+      });
+
+      renderPlayerBoard();
+      renderBotsBoards();
+      updateCurrentCardUI();
+
+      logMessages.innerHTML = "";
+      log("Nueva partida iniciada.");
     }
 
-    const card = deck[currentCardIndex];
-    updateCardUi();
-    log(`Salió la carta ${card}`);
-    botsProcess(card);
-  }
+    function startGame() {
+      resetGameState();
+      btnPause.disabled = false;
+      btnLoteria.disabled = false;
+      startDealer();
+      nextCard();
+    }
 
-  function startDealer() {
-    stopDealer();
-    interval = setInterval(nextCard, CARD_INTERVAL);
-  }
-
-  function stopDealer() {
-    if (interval) clearInterval(interval);
-    interval = null;
-  }
-
-  /* JUEGO */
-  function resetGame() {
-    stopDealer();
-    deck = createDeck();
-    currentCardIndex = -1;
-    paused = false;
-    gameOver = false;
-
-    playerBoard = generateBoard();
-    playerMarked.clear();
-
-    bots[0].board = generateBoard();
-    bots[1].board = generateBoard();
-    bots[2].board = generateBoard();
-
-    renderPlayerBoard();
-    renderBots();
-    updateBotProgress();
-    updateCardUi();
-
-    document.getElementById("log-messages").innerHTML = "";
-    log("Nueva partida.");
-  }
-
-  function startGame() {
-    resetGame();
-    document.getElementById("btn-pause").disabled = false;
-    document.getElementById("btn-loteria").disabled = false;
-
-    startDealer();
-    nextCard();
-  }
-
-  function pauseGame() {
-    paused = true;
-    stopDealer();
-    document.getElementById("btn-pause").disabled = true;
-    document.getElementById("btn-resume").disabled = false;
-    log("Pausa.");
-  }
-
-  function resumeGame() {
-    paused = false;
-    document.getElementById("btn-pause").disabled = false;
-    document.getElementById("btn-resume").disabled = true;
-    startDealer();
-    log("Reanudar.");
-  }
-
-  function checkLoteria() {
-    if (gameOver) return;
-    const revealed = new Set(deck.slice(0, currentCardIndex + 1));
-
-    const allMarked = playerBoard.every(id => playerMarked.has(id));
-    const allRevealed = playerBoard.every(id => revealed.has(id));
-
-    if (allMarked && allRevealed) {
-      gameOver = true;
+    function pauseGame() {
+      isPaused = true;
       stopDealer();
-      log("LOTERÍA válida.");
-      alert("Ganaste 🥳");
-    } else {
-      log("Lotería falsa.");
-      alert("Lotería falsa.");
+      btnPause.disabled = true;
+      btnResume.disabled = false;
     }
-  }
 
-  /* EVENTOS */
-  document.getElementById("btn-new-game").onclick = startGame;
-  document.getElementById("btn-pause").onclick = pauseGame;
-  document.getElementById("btn-resume").onclick = resumeGame;
-  document.getElementById("btn-loteria").onclick = checkLoteria;
+    function resumeGame() {
+      isPaused = false;
+      btnPause.disabled = false;
+      btnResume.disabled = true;
+      startDealer();
+    }
 
-  /* INICIO */
-  bots[0].el = document.getElementById("board-panda");
-  bots[1].el = document.getElementById("board-cleo");
-  bots[2].el = document.getElementById("board-july");
+    function checkPlayerLoteria() {
+      if (gameOver) return;
 
-  bots[0].prog = document.getElementById("bot1-progress");
-  bots[1].prog = document.getElementById("bot2-progress");
-  bots[2].prog = document.getElementById("bot3-progress");
+      const revealed = new Set(deck.slice(0, currentCardIndex + 1));
 
-  initMarquee();
-  resetGame();
+      const allMarked = playerBoard.every(id => playerMarked.has(id));
+      const allRevealed = playerBoard.every(id => revealed.has(id));
 
-</script>
+      if (allMarked && allRevealed) {
+        gameOver = true;
+        stopDealer();
+        alert("¡Lotería válida! Ganaste.");
+      } else {
+        alert("Lotería falsa: te falta marcar o marcaste algo que no salió.");
+      }
+    }
 
+    btnNewGame.addEventListener("click", startGame);
+    btnPause.addEventListener("click", pauseGame);
+    btnResume.addEventListener("click", resumeGame);
+    btnLoteria.addEventListener("click", checkPlayerLoteria);
+
+    /* Bloqueo de clic derecho */
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    initMarquee();
+    resetGameState();
+    btnPause.disabled = true;
+    btnResume.disabled = true;
+    btnLoteria.disabled = true;
+  </script>
 </body>
 </html>
