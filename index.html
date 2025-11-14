@@ -32,7 +32,7 @@
     .board-cell::before,
     .marquee-card::before,
     #current-card::before {
-      content: "©️ Abril Ruzmed · 2025";
+      content: "© Abril Ruzmed · 2025";
       position: absolute;
       inset: 0;
       display: flex;
@@ -269,7 +269,7 @@
   </main>
 
   <footer class="footer">
-    <p>Lotería Berlimexa · Prototipo · ©️ Abril Ruzmed 2025 · All rights reserved</p>
+    <p>Lotería Berlimexa · Prototipo · © Abril Ruzmed 2025 · All rights reserved</p>
   </footer>
 
   <script>
@@ -344,7 +344,7 @@
       iconic.forEach(id => {
         const c = document.createElement("div");
         c.className = "marquee-card";
-        c.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${id}.png") ⁠;
+        c.style.backgroundImage = `url("${CARD_BASE_URL}/${id}.png")`;
         marqueeInner.appendChild(c);
       });
     }
@@ -355,7 +355,7 @@
         const cell = document.createElement("div");
         cell.className = "board-cell";
         cell.dataset.cardId = cardId;
-        cell.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${cardId}.png") ⁠;
+        cell.style.backgroundImage = `url("${CARD_BASE_URL}/${cardId}.png")`;
         cell.addEventListener("click", () => onPlayerCellClick(cell));
         playerBoardContainer.appendChild(cell);
       });
@@ -387,7 +387,7 @@
           const cell = document.createElement("div");
           cell.className = "board-cell";
           cell.dataset.cardId = cardId;
-          cell.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${cardId}.png") ⁠;
+          cell.style.backgroundImage = `url("${CARD_BASE_URL}/${cardId}.png")`;
           bot.boardEl.appendChild(cell);
         });
       });
@@ -408,11 +408,11 @@
           bot.marked.add(cardId);
           markBotCard(bot, cardId);
         }
-        bot.progressEl.textContent = ⁠ ${bot.marked.size}/16 ⁠;
+        bot.progressEl.textContent = `${bot.marked.size}/16`;
         if (bot.marked.size === BOARD_SIZE && !gameOver) {
           gameOver = true;
           stopDealer();
-          alert(⁠ ${bot.name} ganó con LOTERÍA ⁠);
+          alert(`${bot.name} ganó con LOTERÍA`);
         }
       });
     }
@@ -427,8 +427,8 @@
       
       const cardId = deck[currentCardIndex];
       currentCardNumberEl.textContent = cardId;
-      currentCardEl.style.backgroundImage = ⁠ url("${CARD_BASE_URL}/${cardId}.png") ⁠;
-      cardsPlayedEl.textContent = ⁠ Cartas jugadas: ${currentCardIndex+1} / 54 ⁠;
+      currentCardEl.style.backgroundImage = `url("${CARD_BASE_URL}/${cardId}.png")`;
+      cardsPlayedEl.textContent = `Cartas jugadas: ${currentCardIndex+1} / 54`;
     }
 
     function nextCard() {
@@ -444,7 +444,7 @@
 
       const cardId = deck[currentCardIndex];
       updateCurrentCardUI();
-      log(⁠ Salió la carta ${cardId} ⁠);
+      log(`Salió la carta ${cardId}`);
       botsProcessCard(cardId);
     }
 
