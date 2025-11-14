@@ -21,6 +21,21 @@
       color: #333;
     }
 
+    /* MARCA DE AGUA */
+    .watermark {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      opacity: 0.15;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #000;
+      pointer-events: none;
+      user-select: none;
+      transform: rotate(-20deg);
+      z-index: 99999;
+    }
+
     /* HEADER */
     .header {
       text-align: center;
@@ -55,14 +70,14 @@
     .marquee-inner {
       display: flex;
       align-items: center;
-      gap: 2rem;
+      gap: 3rem;
       white-space: nowrap;
       animation: scroll 18s linear infinite;
     }
 
     .marquee-text {
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 1.05rem;
+      font-weight: 700;
     }
 
     @keyframes scroll {
@@ -88,11 +103,11 @@
     }
 
     .current-card {
-      width: 130px;
-      height: 190px;
+      width: 150px;
+      height: 215px;
       margin: 0.5rem auto;
-      border-radius: 8px;
-      border: 2px solid #222;
+      border-radius: 10px;
+      border: 3px solid #222;
       background: #eee center/cover no-repeat;
       display: flex;
       align-items: center;
@@ -104,7 +119,7 @@
     .controls button {
       width: 48%;
       margin: 0.2rem 1%;
-      padding: 0.4rem;
+      padding: 0.5rem;
       border: none;
       border-radius: 5px;
       background: #1565c0;
@@ -140,29 +155,34 @@
     #player-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;          /* más separación */
-      max-width: 420px;     /* tablero más grande */
+      gap: 0.6rem;
+      max-width: 460px;
       margin: auto;
     }
 
     .board-cell {
       position: relative;
-      padding-top: 150%;    /* cartas más grandes */
-      border-radius: 10px;
+      padding-top: 150%;
+      border-radius: 12px;
       border: 3px solid #333;
       background-size: cover;
       background-position: center;
       cursor: pointer;
+      transition: transform .1s ease;
+    }
+
+    .board-cell:hover {
+      transform: scale(1.04);
     }
 
     .board-cell::after {
       content: attr(data-card-id);
       position: absolute;
-      bottom: 3px;
+      bottom: 5px;
       width: 100%;
       text-align: center;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: white;
       text-shadow: 0 0 3px black;
     }
@@ -173,9 +193,8 @@
     }
 
     .board-cell.just-revealed {
-      outline: 3px solid #ffeb3b;
-      transform: scale(1.03);
-      transition: transform 0.15s ease, outline 0.15s ease;
+      outline: 4px solid #ffeb3b;
+      transform: scale(1.05);
     }
 
     /* OPONENTES */
@@ -201,7 +220,8 @@
     }
 
     .opponent-board .board-cell {
-      padding-top: 90%; /* más chiquitas para bots */
+      padding-top: 80%;
+      border-width: 2px;
       cursor: default;
     }
 
@@ -216,6 +236,9 @@
 </head>
 
 <body>
+
+  <div class="watermark">Lotería Berlimexa</div>
+
   <header class="header">
     <h1>Lotería Berlimexa</h1>
     <p>Creado por Abril Ruzmed</p>
@@ -289,11 +312,15 @@
     Lotería Berlimexa · Prototipo sin ánimo de lucro · 2025 · All rights reserved.
   </footer>
 
+<!-- ====================== -->
+<!--     S C R I P T S      -->
+<!-- ====================== -->
+
 <script>
   /* CONFIG */
   const TOTAL_CARDS = 54;
-  const BOARD_SIZE = 16;        // Tablero 4x4 = 16 cartas
-  const CARD_INTERVAL = 3000;   // 3 segundos entre cartas
+  const BOARD_SIZE = 16;
+  const CARD_INTERVAL = 3000;  // 3 segundos
   const CARD_BASE_URL = "assets";
 
   let deck = [];
@@ -338,12 +365,11 @@
     box.scrollTop = box.scrollHeight;
   }
 
-  /* MARQUEE: texto en lugar de imágenes */
+  /* MARQUEE */
   function initMarquee() {
     const text = "Para mayor información y pedidos, escribe a aruiz.med@gmail.com";
     marqueeInner.innerHTML = "";
-    // Repetimos el texto varias veces para que la animación sea continua
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const d = document.createElement("div");
       d.className = "marquee-text";
       d.textContent = text;
@@ -360,9 +386,6 @@
       c.className = "board-cell";
       c.dataset.cardId = card;
       c.style.backgroundImage = `url("${CARD_BASE_URL}/${card}.png")`;
-      c.setAttribute("aria-label", `Carta ${card}`);
-      c.setAttribute("role", "button");
-
       c.onclick = () => onPlayerClick(c);
       board.appendChild(c);
     });
@@ -376,8 +399,6 @@
         c.className = "board-cell";
         c.dataset.cardId = card;
         c.style.backgroundImage = `url("${CARD_BASE_URL}/${card}.png")`;
-        c.setAttribute("aria-label", `Carta ${card} de ${bot.name}`);
-        c.setAttribute("role", "img");
         bot.el.appendChild(c);
       });
     });
@@ -389,15 +410,6 @@
     });
   }
 
-  function markBotCardUi(bot, card) {
-    [...bot.el.querySelectorAll(".board-cell")].forEach(cell => {
-      if (Number(cell.dataset.cardId) === card) {
-        cell.classList.add("marked");
-      }
-    });
-  }
-
-  /* Resaltar carta recién revelada en todos los tableros */
   function highlightCardInBoards(card) {
     document.querySelectorAll(`.board-cell[data-card-id="${card}"]`).forEach(cell => {
       cell.classList.add("just-revealed");
@@ -444,6 +456,14 @@
     });
 
     updateBotProgress();
+  }
+
+  function markBotCardUi(bot, card) {
+    [...bot.el.querySelectorAll(".board-cell")].forEach(cell => {
+      if (Number(cell.dataset.cardId) === card) {
+        cell.classList.add("marked");
+      }
+    });
   }
 
   /* CARTAS */
@@ -514,11 +534,9 @@
     updateBotProgress();
     updateCardUi();
 
-    const logBox = document.getElementById("log-messages");
-    logBox.innerHTML = "";
+    document.getElementById("log-messages").innerHTML = "";
     log("Nueva partida.");
 
-    // Estado de botones al resetear
     document.getElementById("btn-pause").disabled = true;
     document.getElementById("btn-resume").disabled = true;
     document.getElementById("btn-loteria").disabled = true;
@@ -531,7 +549,7 @@
     document.getElementById("btn-resume").disabled = true;
 
     startDealer();
-    nextCard(); // primera carta sale de inmediato
+    nextCard();
   }
 
   function pauseGame() {
@@ -554,10 +572,10 @@
     if (gameOver) return;
     const revealed = new Set(deck.slice(0, currentCardIndex + 1));
 
-    const allPlayerCardsRevealed = playerBoard.every(id => revealed.has(id));
-    const allPlayerCardsMarked = playerBoard.every(id => playerMarked.has(id));
+    const allMarked = playerBoard.every(id => playerMarked.has(id));
+    const allRevealed = playerBoard.every(id => revealed.has(id));
 
-    if (allPlayerCardsMarked && allPlayerCardsRevealed) {
+    if (allMarked && allRevealed) {
       gameOver = true;
       stopDealer();
       log("LOTERÍA válida.");
@@ -585,6 +603,13 @@
 
   initMarquee();
   resetGame();
+</script>
+
+<!-- BLOQUEAR CLIC DERECHO -->
+<script>
+  document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+  });
 </script>
 
 </body>
